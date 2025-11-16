@@ -3,12 +3,45 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 
-def plotar_grafo(G, pos, titulo="Rede Geográfica") -> None:
-    """Desenha o grafo simples."""
+import matplotlib.pyplot as plt
+import networkx as nx
+
+def plotar_grafo(G, pos, inicio, fim) -> None:
+    """Desenha o grafo simples destacando início e fim."""
+    
     plt.figure(figsize=(6, 6))
-    nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray')
+
+    node_colors = []
+    node_sizes = []
+
+    for node in G.nodes():
+        if node == inicio:
+            node_colors.append("blue")
+            node_sizes.append(450)
+        elif node == fim:
+            node_colors.append("red")
+            node_sizes.append(450)
+        else:
+            node_colors.append("lightgray")
+            node_sizes.append(300)
+
+    nx.draw(
+        G,
+        pos,
+        with_labels=True,
+        node_color=node_colors,
+        node_size=node_sizes,
+        edge_color="gray",
+        font_size=8,
+        font_color="black"
+    )
+
+    titulo = f"Rede Geográfica Inicial\nInício: {inicio}   |   Objetivo: {fim}"
     plt.title(titulo)
+
     plt.show()
+    plt.close() 
+
 
 
 def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho, inc, obj) -> None:

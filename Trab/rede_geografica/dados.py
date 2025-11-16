@@ -2,6 +2,8 @@
 
 from random import randint
 
+from random import randint
+
 def criar_dados(parametros):
     """
     Recebe 'parametros' vindos da interface e devolve o dicionário com n e λ.
@@ -10,20 +12,25 @@ def criar_dados(parametros):
     plotar = parametros.get("plotar", True)
     modo = parametros.get("modo", "manual")
 
-    if modo == "manual":
-        # n vem diretamente da interface
-        n = parametros["n"]
+    if modo == "manual" and plotar:
+        # n vem diretamente da interface (garantido >= 100 na interface, mas aqui reforçamos)
+        n = int(parametros.get("n", 100))
+        if n < 100:
+            n = 100
 
-    elif modo == "random":
-        # gera número aleatório
-        n = randint(100, 150)
-
+    elif modo == "random" and plotar:
+        # gera número aleatório (mínimo 100). Ajuste o limite superior se quiser.
+        n = randint(100, 200)
+    elif not plotar:   
+        n = 2000
     else:
         # fallback de segurança
-        n = parametros.get("n", 10)
+        n = int(parametros.get("n", 100))
+        if n < 100:
+            n = 100
 
     # lambdas possíveis 
-    lambd_rede = [4, 5, 6]
+    lambd_rede = [13, 14, 15]
     l = randint(0, 2)
 
     print(f"λ escolhido: {lambd_rede[l]}, n = {n}")
@@ -32,3 +39,4 @@ def criar_dados(parametros):
         "n": n,
         "lambd": lambd_rede[l]
     }
+
