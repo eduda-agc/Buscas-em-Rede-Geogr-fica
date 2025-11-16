@@ -38,7 +38,8 @@ def main():
         fim = parametros.get("fim", n - 1)
 
     print(f"Início = {inicio}, Fim = {fim}, Algoritmo = {algoritmo}")
-    plotar_grafo(G, pos, inicio, fim)
+    if exibir: 
+        plotar_grafo(G, pos, inicio, fim)
     
 
     # executar a busca
