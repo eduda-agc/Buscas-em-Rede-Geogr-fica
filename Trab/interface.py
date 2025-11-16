@@ -29,9 +29,7 @@ class JanelaBusca:
 
         frame.columnconfigure(0, weight=1)
 
-        # ------------------------------
-        # Tipo de Grafo
-        # ------------------------------
+        # se vai pesonalizar os nós ou se vai deixar ramdômico
         tk.Label(frame, text="Tipo de Grafo:", font=("Arial", 12)).grid(row=0, column=0, sticky="w")
 
         self.modo_var = tk.StringVar(value="manual")
@@ -40,17 +38,13 @@ class JanelaBusca:
         ttk.Radiobutton(frame, text="Aleatório", variable=self.modo_var, value="random",
                         command=self._toggle_manual).grid(row=2, column=0, sticky="w")
 
-        # ------------------------------
-        # Quantidade de nós
-        # ------------------------------
+        # quantos nós
         tk.Label(frame, text="Quantidade de nós:").grid(row=3, column=0, sticky="w", pady=(10, 0))
         self.entry_n = ttk.Entry(frame, width=10)
         self.entry_n.insert(0, "10")
         self.entry_n.grid(row=4, column=0, sticky="w")
 
-        # ------------------------------
-        # Nós inicial e final
-        # ------------------------------
+        #nó inicial e nó objeticvo
         tk.Label(frame, text="Nó inicial:").grid(row=5, column=0, sticky="w", pady=(10, 0))
         self.entry_inicio = ttk.Entry(frame, width=10)
         self.entry_inicio.insert(0, "0")
@@ -61,9 +55,7 @@ class JanelaBusca:
         self.entry_fim.insert(0, "9")
         self.entry_fim.grid(row=8, column=0, sticky="w")
 
-        # ------------------------------
-        # Algoritmo
-        # ------------------------------
+        # algoritmo
         tk.Label(frame, text="Algoritmo de busca:", font=("Arial", 12)).grid(row=9, column=0, sticky="w", pady=(15, 0))
 
         self.busca_var = tk.StringVar(value="Best-First")
@@ -72,15 +64,11 @@ class JanelaBusca:
             state="readonly", width=15)
         self.combo_busca.grid(row=10, column=0, sticky="w", pady=5)
 
-        # ------------------------------
-        # Exibir animação (CHECKBOX)
-        # ------------------------------
+        #exibe a animação
         self.plotar_var = tk.BooleanVar(value=True)
         ttk.Checkbutton(frame, text="Exibir animação da busca", variable=self.plotar_var).grid(row=11, column=0, pady=10, sticky="w")
 
-        # ------------------------------
-        # Start button
-        # ------------------------------
+        # botão "start"
         botao = ttk.Button(self.root, text="Start", command=self._start)
         botao.pack(pady=20)
 
@@ -133,7 +121,7 @@ def pegar_dados():
     global params
     # abre o interface() só uma vez
     if params is None: 
-        # Aqui você define ou lê os parâmetros
+        # define ou lê os parâmetros
         params = {"plotar": True, "modo": "manual", "n": 10}
         params = interface()   
     return params
