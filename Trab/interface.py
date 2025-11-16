@@ -16,7 +16,7 @@ class JanelaBusca:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Configurar Busca")
-        self.root.geometry("420x470")
+        self.root.geometry("520x520")
         self.root.resizable(False, False)
 
         self.parametros = None  
@@ -67,7 +67,13 @@ class JanelaBusca:
 
         #exibe a animação
         self.plotar_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(frame, text="Exibir animação da busca", variable=self.plotar_var).grid(row=11, column=0, pady=10, sticky="w")
+        ttk.Checkbutton(
+                frame,
+                text="Exibir animação da busca",
+                variable=self.plotar_var,
+                command=self._toggle_manual
+            ).grid(row=11, column=0, pady=10, sticky="w")
+
 
         # botão "start"
         botao = ttk.Button(self.root, text="Start", command=self._start)
@@ -78,18 +84,20 @@ class JanelaBusca:
         self.root.bind("<Return>", lambda event: self._start())
         self.root.mainloop()
 
-    # alterna entre modo manual e aleatório
+    # controla o estado dos campos conforme o modo selecionado
     def _toggle_manual(self):
-        if self.modo_var.get() == "manual":
-            # habilita tudo no modo manual
-            self.entry_inicio.config(state=tk.NORMAL)
-            self.entry_fim.config(state=tk.NORMAL)
-            self.entry_n.config(state=tk.NORMAL)
-        else:
-            # desabilita os três campos no modo aleatório
-            self.entry_inicio.config(state=tk.DISABLED)
-            self.entry_fim.config(state=tk.DISABLED)
-            self.entry_n.config(state=tk.DISABLED)
+        modo = self.modo_var.get()
+        plotar = self.plotar_var.get()
+
+        habilitar = (modo == "manual" and plotar is True)
+        estado = tk.NORMAL if habilitar else tk.DISABLED
+
+        self.entry_inicio.config(state=estado)
+        self.entry_fim.config(state=estado)
+        self.entry_n.config(state=estado)
+
+        
+        
 
     # inicia a captura dos dados
     def _start(self):
