@@ -6,6 +6,12 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import networkx as nx
 
+FIG = None
+AX = None
+NODES = None
+BACKGROUND = None
+
+
 def plotar_grafo(G, pos, inicio, fim) -> None:
     """Desenha o grafo simples destacando início e fim."""
     
@@ -43,30 +49,22 @@ def plotar_grafo(G, pos, inicio, fim) -> None:
     plt.close() 
 
 
+def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho, inc, obj):
+    global FIG, AX, NODES, BACKGROUND
 
-def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho, inc, obj) -> None:
-    """Desenha o grafo durante a busca."""
-    # ativar modo interativo global
     plt.ion()
 
-    background = None
-    nodes = None
+    # cria a figura só na primeira vez
+    if FIG is None:
+        FIG, AX = plt.subplots(figsize=(6, 6))
+        manager = plt.get_current_fig_manager()
+        manager.full_screen_toggle()
+        BACKGROUND, NODES = iniciar_animacao(G, pos, None, None, AX, FIG)
 
-    # manter uma única figura global
-    fig, ax = plt.subplots(figsize=(6, 6))
-
-    # força fullscreen 
-    manager = plt.get_current_fig_manager()
-    manager.full_screen_toggle()
-
-    if background is None:
-        background, nodes = iniciar_animacao(G, pos, nodes, background, ax, fig)
-
-    fig.canvas.restore_region(background)
+    FIG.canvas.restore_region(BACKGROUND)
 
     titulo = f"{busca} > Passo {passo}: Nó Atual {atual}, Início {inc}, Objetivo {obj}"
 
-    # define cores dos nós
     cores = []
     for no in G.nodes():
         if no == atual:
@@ -80,14 +78,14 @@ def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho
         else:
             cores.append("lightblue")
 
-    # seta as cores dos nós
-    nodes.set_color(cores)
-    ax.set_title(titulo)
+    NODES.set_color(cores)
+    AX.set_title(titulo)
 
-    ax.draw_artist(nodes) # atualiza os nós com as novas cores
-    fig.canvas.blit(ax.bbox) # atualiza a área do gráfico
-    fig.canvas.flush_events() # processa eventos pendentes
-    plt.pause(1.5)  # controla velocidade da animação
+    AX.draw_artist(NODES)
+    FIG.canvas.blit(AX.bbox)
+    FIG.canvas.flush_events()
+    plt.pause(1)
+
 
 def finalizar_plot():
     plt.pause(3)      # controla velocidade na ultima etapa
