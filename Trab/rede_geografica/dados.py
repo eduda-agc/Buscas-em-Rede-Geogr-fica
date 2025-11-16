@@ -5,7 +5,6 @@ from random import randint
 def criar_dados(parametros):
     """
     Recebe 'parametros' vindos da interface e devolve o dicionário com n e λ.
-    NÃO chama a interface aqui.
     """
 
     plotar = parametros.get("plotar", True)
@@ -17,13 +16,13 @@ def criar_dados(parametros):
 
     elif modo == "random":
         # gera número aleatório
-        n = randint(5, 50)
+        n = randint(100, 150)
 
     else:
         # fallback de segurança
         n = parametros.get("n", 10)
 
-    # lambdas possíveis (você pode ajustar como quiser)
+    # lambdas possíveis 
     lambd_rede = [4, 5, 6]
     l = randint(0, 2)
 
