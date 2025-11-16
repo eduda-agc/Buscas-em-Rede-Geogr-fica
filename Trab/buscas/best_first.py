@@ -5,9 +5,11 @@ import matplotlib.pyplot as plt
 from rede_geografica.plot import plotar_grafo_busca, finalizar_plot
 from rede_geografica.grafo import dist_euclidiana as distancia
 from config import reconstroi_caminho
+from time import perf_counter
 
 
 def best_first(G, pos, inicio, objetivo, exibir) -> None | tuple[list[int], float]:
+    tempo_exec = perf_counter()
     # cria a heap
     frontera = [] 
     # começamos pelo nó de início = raíz 
@@ -29,7 +31,7 @@ def best_first(G, pos, inicio, objetivo, exibir) -> None | tuple[list[int], floa
         visitados.add(atual)
 
         # plotar o estado atual da busca
-        # G, pos, busca, passo, visitados, frontera, atual, caminho
+        # G, pos, busca, passo, visitados, frontera, atual, caminho, inc, obj
         if exibir:
             plotar_grafo_busca(
                 G, pos,
@@ -46,8 +48,13 @@ def best_first(G, pos, inicio, objetivo, exibir) -> None | tuple[list[int], floa
 
         # verifica se cheguei no objetivo
         if atual == objetivo:
-            finalizar_plot()
-            return reconstroi_caminho(pais, atual), 0.0
+            if exibir: # se a opção foi de exibir, finaliza o plot
+                finalizar_plot()
+                return reconstroi_caminho(pais, atual), _
+            
+            # se não, retorna o tempo de execução
+            tempo_exec = perf_counter() - tempo_exec
+            return reconstroi_caminho(pais, atual), tempo_exec
 
         # procurar nos vizinhos
         for viz in G.neighbors(atual):
