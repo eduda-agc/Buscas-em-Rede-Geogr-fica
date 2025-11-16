@@ -11,12 +11,29 @@ def plotar_grafo(G, pos, titulo="Rede Geográfica") -> None:
     plt.show()
 
 
-def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho) -> None:
+def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho, inc, obj) -> None:
     """Desenha o grafo durante a busca."""
+    # ativar modo interativo global
+    plt.ion()
 
-    titulo = f"{busca} — Passo {passo}"
+    background = None
+    nodes = None
 
-    # Define cores dos nós
+    # manter uma única figura global
+    fig, ax = plt.subplots(figsize=(6, 6))
+
+    # força fullscreen 
+    manager = plt.get_current_fig_manager()
+    manager.full_screen_toggle()
+
+    if background is None:
+        background, nodes = iniciar_animacao(G, pos, nodes, background, ax, fig)
+
+    fig.canvas.restore_region(background)
+
+    titulo = f"{busca} > Passo {passo}: Nó Atual {atual}, Início {inc}, Objetivo {obj}"
+
+    # define cores dos nós
     cores = []
     for no in G.nodes():
         if no == atual:
@@ -30,22 +47,33 @@ def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho
         else:
             cores.append("lightblue")
 
-    # cria a figura
-    fig = plt.figure(figsize=(6, 6))
+    # seta as cores dos nós
+    nodes.set_color(cores)
+    ax.set_title(titulo)
 
-    # pega o manager e coloca fullscreen
-    manager = plt.get_current_fig_manager()
-    manager.full_screen_toggle()
+    ax.draw_artist(nodes) # atualiza os nós com as novas cores
+    fig.canvas.blit(ax.bbox) # atualiza a área do gráfico
+    fig.canvas.flush_events() # processa eventos pendentes
+    plt.pause(1.5)  # controla velocidade da animação
 
-    # desenha o grafo
-    nx.draw(G, pos, with_labels=True, node_color=cores, edge_color='gray', node_size=50)
-    plt.title(titulo)
+def finalizar_plot():
+    plt.pause(3)      # controla velocidade na ultima etapa
 
-    # exibe sem travar o programa
-    plt.show(block=False)
+def iniciar_animacao(G, pos, nd, bg, ax, fig):
 
-    # espera alguns segundos
-    plt.pause(1.5)
+    ax.clear() # limpa o eixo para redesenhar
+    ax.set_title("Busca") # título inicial
 
-    # fecha SOMENTE esta figura
-    plt.close(fig)
+    # desenha grafo base (edges + labels)
+    nx.draw_networkx_edges(G, pos, ax=ax, edge_color="gray")
+    nx.draw_networkx_labels(G, pos, ax=ax)
+
+    # desenha nodes inicial (cor será alterada depois)
+    nd = nx.draw_networkx_nodes(G, pos, node_color="lightblue", ax=ax)
+
+    # captura o fundo para animação
+    fig.canvas.draw()
+    bg = fig.canvas.copy_from_bbox(ax.bbox)
+
+    return bg, nd
+
