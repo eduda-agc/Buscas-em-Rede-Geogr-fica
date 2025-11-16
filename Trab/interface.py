@@ -38,11 +38,12 @@ class JanelaBusca:
         ttk.Radiobutton(frame, text="Aleatório", variable=self.modo_var, value="random",
                         command=self._toggle_manual).grid(row=2, column=0, sticky="w")
 
-        # quantos nós
+        # número de nós
         tk.Label(frame, text="Quantidade de nós:").grid(row=3, column=0, sticky="w", pady=(10, 0))
         self.entry_n = ttk.Entry(frame, width=10)
-        self.entry_n.insert(0, "10")
+        self.entry_n.insert(0, "100")  # valor padrão sempre visível
         self.entry_n.grid(row=4, column=0, sticky="w")
+
 
         #nó inicial e nó objeticvo
         tk.Label(frame, text="Nó inicial:").grid(row=5, column=0, sticky="w", pady=(10, 0))
@@ -72,31 +73,50 @@ class JanelaBusca:
         botao = ttk.Button(self.root, text="Start", command=self._start)
         botao.pack(pady=20)
 
+        # configura o estado inicial dos campos
         self._toggle_manual()
         self.root.bind("<Return>", lambda event: self._start())
         self.root.mainloop()
 
+    # alterna entre modo manual e aleatório
     def _toggle_manual(self):
-        estado = tk.NORMAL if self.modo_var.get() == "manual" else tk.DISABLED
-        self.entry_inicio.config(state=estado)
-        self.entry_fim.config(state=estado)
+        if self.modo_var.get() == "manual":
+            # habilita tudo no modo manual
+            self.entry_inicio.config(state=tk.NORMAL)
+            self.entry_fim.config(state=tk.NORMAL)
+            self.entry_n.config(state=tk.NORMAL)
+        else:
+            # desabilita os três campos no modo aleatório
+            self.entry_inicio.config(state=tk.DISABLED)
+            self.entry_fim.config(state=tk.DISABLED)
+            self.entry_n.config(state=tk.DISABLED)
 
+    # inicia a captura dos dados
     def _start(self):
         try:
-            n = int(self.entry_n.get())
-            if n < 2: raise ValueError
-
             modo = self.modo_var.get()
 
             if modo == "manual":
-                inicio = int(self.entry_inicio.get())
-                fim = int(self.entry_fim.get())
-                if not (0 <= inicio < n and 0 <= fim < n):
+                # lê n e força mínimo 100
+                n = int(self.entry_n.get() or 100)
+                if n < 100:
+                    n = 100
+
+                # lê início/fim com defaults caso o usuário deixe em branco
+                inicio = int(self.entry_inicio.get() or 0)
+                fim = int(self.entry_fim.get() or (n - 1))
+
+                # valida
+                if not (0 <= inicio < n and 0 < fim < n and inicio != fim and n >= 100):
                     raise ValueError
-            else:
+
+            else:  # modo == "random"
+                # não depende dos campos da interface, valores automáticos tratados em dados
+                n = 100   # mínimo garantido
                 inicio = None
                 fim = None
 
+            # armazena os parâmetros
             self.parametros = {
                 "n": n,
                 "inicio": inicio,
@@ -111,6 +131,7 @@ class JanelaBusca:
         except ValueError:
             messagebox.showerror("Erro", "Valores inválidos.")
 
+# função para abrir a interface e pegar os dados
 def interface():
     janela = JanelaBusca()
     return janela.parametros
@@ -122,7 +143,7 @@ def pegar_dados():
     # abre o interface() só uma vez
     if params is None: 
         # define ou lê os parâmetros
-        params = {"plotar": True, "modo": "manual", "n": 10}
+        params = {"plotar": True, "modo": "manual", "n": 100, "inicio": 0, "fim": 99, "busca": "Best-First"}
         params = interface()   
     return params
 

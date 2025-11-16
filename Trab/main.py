@@ -23,7 +23,6 @@ def main():
 
     # criar a rede geográfica
     G, pos = rede_geografica(n, lambd)
-    plotar_grafo(G, pos, "Rede Geográfica Inicial")
    
     # extrair parâmetros da interface
     modo = parametros.get("modo", "manual")
@@ -37,8 +36,10 @@ def main():
     else:
         inicio = parametros.get("inicio", 0)
         fim = parametros.get("fim", n - 1)
-    
+
     print(f"Início = {inicio}, Fim = {fim}, Algoritmo = {algoritmo}")
+    plotar_grafo(G, pos, inicio, fim)
+    
 
     # executar a busca
     match algoritmo:
@@ -57,11 +58,16 @@ def main():
             return
 
     # mostrar resultado 
-    if resultado:
-        caminho, tempo = resultado
-        print(f"Caminho encontrado: {caminho}, tempo = {tempo}")
-    else:
+    if not resultado:
         print("Nenhum caminho encontrado.")
+    else:
+        caminho, tempo = resultado
+        if exibir:
+            print(f"Caminho encontrado: {caminho}")
+        else:
+            print(f"Caminho encontrado: {caminho}, tempo = {tempo}")
+
+    
 
 
 if __name__ == "__main__":
