@@ -2,11 +2,12 @@
 
 import heapq 
 import matplotlib.pyplot as plt
-from rede_geografica.plot import plotar_grafo_busca
+from rede_geografica.plot import plotar_grafo_busca, finalizar_plot
 from rede_geografica.grafo import dist_euclidiana as distancia
 from config import reconstroi_caminho
 
-def best_first(G, pos, inicio, objetivo) -> None | tuple[list[int], float]:
+
+def best_first(G, pos, inicio, objetivo, exibir) -> None | tuple[list[int], float]:
     # cria a heap
     frontera = [] 
     # começamos pelo nó de início = raíz 
@@ -29,19 +30,23 @@ def best_first(G, pos, inicio, objetivo) -> None | tuple[list[int], float]:
 
         # plotar o estado atual da busca
         # G, pos, busca, passo, visitados, frontera, atual, caminho
-        plotar_grafo_busca(
-            G, pos,
-            busca="Best-First",
-            passo=passo,
-            visitados=visitados,
-            frontera=[n for _, n in frontera],
-            atual=atual,
-            caminho=reconstroi_caminho(pais, atual)
-        )
+        if exibir:
+            plotar_grafo_busca(
+                G, pos,
+                busca="Best-First",
+                passo=passo,
+                visitados=visitados,
+                frontera=[n for _, n in frontera],
+                atual=atual,
+                caminho=reconstroi_caminho(pais, atual),
+                inc = inicio,
+                obj = objetivo
+            )
         passo += 1
 
         # verifica se cheguei no objetivo
         if atual == objetivo:
+            finalizar_plot()
             return reconstroi_caminho(pais, atual), 0.0
 
         # procurar nos vizinhos
