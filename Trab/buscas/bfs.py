@@ -2,29 +2,8 @@ from collections import deque
 from time import perf_counter
 
 import networkx as nx
+from config import reconstroi_caminho
 from rede_geografica.plot import finalizar_plot, plotar_grafo_busca
-
-
-def test_bfs():
-    """
-    Função de teste da bfs
-    """
-
-    # Criando um grafo de teste
-    pos = [1, 4, 23, 54, 2, 4]
-    G = nx.Graph()
-    G.add_nodes_from([1, 2, 3, 4, 5])
-    G.add_edges_from([(1, 2), (1, 3), (2, 4), (4, 2)])
-
-    # Definiciondo nó inicial e objetivo
-    inicio = 1
-    objetivo = 5
-
-    # Rodando a BFS
-    caminho, _ = bfs(G, pos, inicio, objetivo, False)
-
-    # Exibindo os resultados
-    print(f"Caminho encontrado: {caminho}")
 
 
 def bfs(G, pos, inicio, objetivo, exibir):
@@ -50,17 +29,15 @@ def bfs(G, pos, inicio, objetivo, exibir):
     # Medindo o tempo de execução
     tempo_exec = perf_counter()
 
-    # Declarando as variáveis de retorno
-    caminho = []
-
     # Declarando as variáveis auxiliares
-    visitados = {}
+    pais = {}  # Usado para reconstruir o caminho
+    visitados = set()
     proximos = deque()
     passo = 0
 
-    # iniciocializando a busca com o no atual
+    # inicializando a busca com o no atual
     proximos.append(inicio)
-    visitados[inicio] = True
+    pais[inicio] = None
 
     while proximos:
         no_atual = proximos.popleft()
@@ -75,34 +52,30 @@ def bfs(G, pos, inicio, objetivo, exibir):
                 visitados=visitados,
                 frontera=list(proximos),
                 atual=no_atual,
-                caminho=caminho,
+                caminho=reconstroi_caminho(pais, no_atual),
                 inc=inicio,
                 obj=objetivo,
             )
 
-        # Atualizando os dados da visita atual
-        caminho.append(no_atual)
+        # Atualizando os dados com a visita atual
+        visitados.add(no_atual)
         passo += 1
 
         # Verificando se é o objetivo
         if no_atual == objetivo:
             if exibir:
                 finalizar_plot()
-                return caminho, None
+                return reconstroi_caminho(pais, no_atual), None
 
             # Retorno com tempo de execução caso não haja interface
             tempo_exec = perf_counter() - tempo_exec
-            return caminho, tempo_exec
+            return reconstroi_caminho(pais, no_atual), tempo_exec
 
         # Adcionando filhos não-visitados na lista de próximos
         filhos = list(G.adj[no_atual])
         for filho in filhos:
-            if not visitados.get(filho, False):
+            if filho not in proximos and filho not in visitados:
                 proximos.append(filho)
-                visitados[filho] = True  # Impede looops
+                pais[filho] = no_atual
 
     return None, None
-
-
-if __name__ == "__main__":
-    test_bfs()
