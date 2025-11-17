@@ -1,8 +1,9 @@
-import networkx as nx
-import numpy as np
 from collections import deque
 
-def test_bfs():
+import networkx as nx
+
+
+def test_dfs():
     """
     Função de teste da bfs
     """
@@ -10,14 +11,14 @@ def test_bfs():
     # Criando um grafo de teste
     G = nx.Graph()
     G.add_nodes_from([1, 2, 3, 4, 5])
-    G.add_edges_from([(1, 2), (1, 3), (2, 4), (4, 2)])
+    G.add_edges_from([(1, 2), (2, 4), (4, 3), (3, 2)])
 
     # Definindo nó inicial e objetivo
     inicio = 1
     objetivo = 5
 
     # Rodando a BFS
-    caminho, dist, sucesso = bfs(G, inicio, objetivo)
+    caminho, dist, sucesso = dfs(G, inicio, objetivo)
 
     # Exibindo os resultados
     print(f"Sucesso da busca: {sucesso}")
@@ -25,7 +26,7 @@ def test_bfs():
     print(f"Distância do caminho: {dist}")
 
 
-def bfs(G, ini, obj):
+def dfs(G, ini, obj):
     """
     Calcula uma busca em largura pelo grafo
     argumentos:
@@ -52,7 +53,7 @@ def bfs(G, ini, obj):
     proximos.append(ini)
     visitados[ini] = True
 
-    while not proximos.empty():
+    while proximos:
         no_atual = proximos.pop()
 
         # Atualizando os dados da visita atual
@@ -60,7 +61,7 @@ def bfs(G, ini, obj):
         dist += 1
 
         # Verificando se é o objetivo
-        if(no_atual == obj):
+        if no_atual == obj:
             sucesso = True
             break
 
@@ -69,10 +70,10 @@ def bfs(G, ini, obj):
         for filho in filhos:
             if not visitados.get(filho, False):
                 proximos.append(filho)
-                visitados[filho] = True     # Impede looops
-                
+                visitados[filho] = True  # Impede looops
+
     return caminho, dist, sucesso
 
 
 if __name__ == "__main__":
-    test_bfs()
+    test_dfs()

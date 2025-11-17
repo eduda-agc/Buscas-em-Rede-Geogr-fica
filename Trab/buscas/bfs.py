@@ -1,6 +1,7 @@
-import networkx as nx
-import numpy as np
 from queue import Queue
+
+import networkx as nx
+
 
 def test_bfs():
     """
@@ -60,7 +61,7 @@ def bfs(G, ini, obj):
         dist += 1
 
         # Verificando se é o objetivo
-        if(no_atual == obj):
+        if no_atual == obj:
             sucesso = True
             break
 
@@ -69,8 +70,8 @@ def bfs(G, ini, obj):
         for filho in filhos:
             if not visitados.get(filho, False):
                 proximos.put(filho)
-                visitados[filho] = True     # Impede looops
-                
+                visitados[filho] = True  # Impede looops
+
     return caminho, dist, sucesso
 
 
