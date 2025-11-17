@@ -1,3 +1,3 @@
-from .bfs_test import bfs_test
+from .testa_busca import testa_busca
 
-__all__ = ["bfs_test"]
+__all__ = ["testa_busca"]

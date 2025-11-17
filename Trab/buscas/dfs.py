@@ -1,7 +1,6 @@
 from collections import deque
 from time import perf_counter
 
-import networkx as nx
 from config import reconstroi_caminho
 from rede_geografica.plot import finalizar_plot, plotar_grafo_busca
 
@@ -73,7 +72,3 @@ def dfs(G, pos, inicio, objetivo, exibir):
                 pais[filho] = no_atual
 
     return None, None
-
-
-if __name__ == "__main__":
-    test_dfs()
