@@ -2,7 +2,6 @@
 
 from random import randint
 
-from random import randint
 
 def criar_dados(parametros):
     """
@@ -21,7 +20,7 @@ def criar_dados(parametros):
     elif modo == "random" and plotar:
         # gera número aleatório (mínimo 100). Ajuste o limite superior se quiser.
         n = randint(100, 200)
-    elif not plotar:   
+    elif not plotar:
         n = 2000
     else:
         # fallback de segurança
@@ -29,14 +28,10 @@ def criar_dados(parametros):
         if n < 100:
             n = 100
 
-    # lambdas possíveis 
+    # lambdas possíveis
     lambd_rede = [13, 14, 15]
     l = randint(0, 2)
 
     print(f"λ escolhido: {lambd_rede[l]}, n = {n}")
 
-    return {
-        "n": n,
-        "lambd": lambd_rede[l]
-    }
-
+    return {"n": n, "lambd": lambd_rede[l]}
