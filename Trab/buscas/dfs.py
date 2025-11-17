@@ -1,37 +1,17 @@
 from collections import deque
+from time import perf_counter
 
 import networkx as nx
+from config import reconstroi_caminho
+from rede_geografica.plot import finalizar_plot, plotar_grafo_busca
 
 
-def test_dfs():
-    """
-    Função de teste da bfs
-    """
-
-    # Criando um grafo de teste
-    G = nx.Graph()
-    G.add_nodes_from([1, 2, 3, 4, 5])
-    G.add_edges_from([(1, 2), (2, 4), (4, 3), (3, 2)])
-
-    # Definindo nó inicial e objetivo
-    inicio = 1
-    objetivo = 5
-
-    # Rodando a BFS
-    caminho, dist, sucesso = dfs(G, inicio, objetivo)
-
-    # Exibindo os resultados
-    print(f"Sucesso da busca: {sucesso}")
-    print(f"Caminho encontrado: {caminho}")
-    print(f"Distância do caminho: {dist}")
-
-
-def dfs(G, ini, obj):
+def dfs(G, pos, inicio, objetivo, exibir):
     """
     Calcula uma busca em largura pelo grafo
     argumentos:
         G - Grafo
-        ini - Nó inicial
+        inicio - Nó inicial
         obj - Nó objetivo
 
     Retorno:
@@ -40,39 +20,59 @@ def dfs(G, ini, obj):
         sucesso: booleano para informar se o nó objetivo foi atingido
     """
 
-    # Declarando as variáveis de retorno
-    caminho = []
-    dist = 0.0
+    # Medindo o tempo de execução
+    tempo_exec = perf_counter()
 
     # Declarando as variáveis auxiliares
-    visitados = {}
+    visitados = set()
     proximos = deque()
-    sucesso = False
+    passo = 0
+    pais = {}
 
     # Inicializando a busca com o no atual
-    proximos.append(ini)
-    visitados[ini] = True
+    proximos.append(inicio)
+    pais[inicio] = None
 
     while proximos:
         no_atual = proximos.pop()
+        print(no_atual)
+
+        if exibir:
+            plotar_grafo_busca(
+                G,
+                pos,
+                busca="DFS",
+                passo=passo,
+                visitados=visitados,
+                frontera=list(proximos),
+                atual=no_atual,
+                caminho=reconstroi_caminho(pais, no_atual),
+                inc=inicio,
+                obj=objetivo,
+            )
 
         # Atualizando os dados da visita atual
-        caminho.append(no_atual)
-        dist += 1
+        visitados.add(no_atual)
+        passo += 1
 
         # Verificando se é o objetivo
-        if no_atual == obj:
-            sucesso = True
-            break
+        if no_atual == objetivo:
+            if exibir:
+                finalizar_plot()
+                return reconstroi_caminho(pais, no_atual), None
+
+            # Retorno com tempo de execução caso não haja interface
+            tempo_exec = perf_counter() - tempo_exec
+            return reconstroi_caminho(pais, no_atual), tempo_exec
 
         # Adcionando filhos não-visitados na lista de próximos
         filhos = list(G.adj[no_atual])
         for filho in filhos:
-            if not visitados.get(filho, False):
+            if filho not in visitados and filho not in proximos:
                 proximos.append(filho)
-                visitados[filho] = True  # Impede looops
+                pais[filho] = no_atual
 
-    return caminho, dist, sucesso
+    return None, None
 
 
 if __name__ == "__main__":

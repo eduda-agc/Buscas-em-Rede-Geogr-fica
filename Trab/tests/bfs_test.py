@@ -1,5 +1,5 @@
 import networkx as nx
-from buscas import bfs
+from buscas import bfs, dfs
 
 from tests.test_data import test_data
 
@@ -23,11 +23,19 @@ def bfs_test():
         # Rodando a BFS
         caminho, tempo = bfs(G, pos, inicio, objetivo, False)
 
+        print(f"O que foi retornado: {caminho}")
+
         # Exibindo os resultados
-        print(f"Grafo: {test['adj_list']}")
-        print(f"Início e fim: {inicio} --> {objetivo}")
-        print(f"Caminho encontrado: {caminho}")
-        print(f"Tempo transcorrido: {tempo}\n")
+        if caminho != None:
+            print(f"Grafo: {test['adj_list']}")
+            print(f"Início e fim: {inicio} --> {objetivo}")
+            print(f"Caminho encontrado: {caminho}")
+            print(f"Tempo transcorrido: {tempo}\n")
+        else:
+            print(f"Grafo: {test['adj_list']}")
+            print(f"Início e fim: {inicio} --> {objetivo}")
+            print("Caminho não encontrado :(")
+            print(f"Tempo transcorrido: {tempo}\n")
 
 
 if __name__ == "__main__":

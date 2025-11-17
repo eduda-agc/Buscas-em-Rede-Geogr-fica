@@ -34,4 +34,4 @@ def criar_dados(parametros):
 
     print(f"λ escolhido: {lambd_rede[l]}, n = {n}")
 
-    return {"n": 30, "lambd": lambd_rede[l]}
+    return {"n": n, "lambd": lambd_rede[l]}
