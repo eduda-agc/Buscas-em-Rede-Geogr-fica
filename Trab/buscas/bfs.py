@@ -1,5 +1,4 @@
 from queue import Queue
-
 import networkx as nx
 
 
