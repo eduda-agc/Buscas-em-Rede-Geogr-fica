@@ -3,7 +3,7 @@
 ## Autores
 
 - Christian Bernard Simas Corrêa :: 11795572
-- Eduarda :: 
+- Eduarda Almeida Garrett de Carvalho :: 14566794
 - Gabriel Antunes Afonso de Araujo :: 14571077
 
 ## Sobre o projeto
