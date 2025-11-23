@@ -8,6 +8,7 @@ from buscas.a_estr import a_estr
 from buscas.bfs import bfs
 from buscas.dfs import dfs
 from buscas.hill_cl_sem_bkt import hill_cl_sem_bkt
+from buscas.dijkstra import dijkstra
 
 from interface import pegar_dados
 
@@ -54,6 +55,8 @@ def main():
             resultado = a_estr(G, pos, inicio, fim, exibir)
         case "Hill Climbing":
             resultado = hill_cl_sem_bkt(G, pos, inicio, fim, exibir)
+        case "Dijkstra":
+            resultado = dijkstra(G, pos, inicio, fim, exibir)
         case _:
             print("Algoritmo desconhecido.")
             return

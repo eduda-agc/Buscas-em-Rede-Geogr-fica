@@ -69,6 +69,8 @@ def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho
     for no in G.nodes():
         if no == atual:
             cores.append("yellow")
+        elif no == obj:
+            cores.append("magenta")
         elif no in caminho:
             cores.append("green")
         elif no in visitados:

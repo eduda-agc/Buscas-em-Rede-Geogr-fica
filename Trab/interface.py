@@ -61,7 +61,7 @@ class JanelaBusca:
 
         self.busca_var = tk.StringVar(value="Best-First")
         self.combo_busca = ttk.Combobox(frame, textvariable=self.busca_var,
-            values=["DFS", "BFS", "Best-First", "A*", "Hill Climbing"],
+            values=["DFS", "BFS", "Best-First", "A*", "Hill Climbing", "Dijkstra"],
             state="readonly", width=15)
         self.combo_busca.grid(row=10, column=0, sticky="w", pady=5)
 
