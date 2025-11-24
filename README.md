@@ -27,14 +27,18 @@ A interface desenvolvida escolher parâmetros específicos para a rede, ou gerá
 
 Segue a descrição dos 3 experimentos do projeto:
 
+1. Para cada algoritmo, escolher vértices de partida e destino específicos e comparar os caminhos efetuados e resultados obtidos.
+2. Rodar cada algoritmo 10 vezes para buscas entre pontos distintos de uma rede gerada com parâmetros específicos.
+3. Comparar o desempenho dos algoritmos Djikstra e A* para a rede gerada no experimento *2*.
+
 ## Como rodar
 
 Após clonar o repositório:
 
-1. Entre na pasta `Trab`
+1. Entre no diretório `Trab/`
 2. Crie um ambiente virutal do python `python3 -m venv .venv`
 3. Entre no ambiente virtual `source .venv/bin/activate`
 4. Instale as dependências `pip install -r requirements.txt`
 5. Rode o programa com `python main.py`
 
-Observação, é possível rodar o teste de terminal com `python -m tests.bfs_test`
+Para o desenvolvimento, é possível rodar o teste de terminal com `python -m tests.bfs_test`
