@@ -34,7 +34,6 @@ def dfs(G, pos, inicio, objetivo, exibir):
 
     while proximos:
         no_atual = proximos.pop()
-        print(no_atual)
 
         if exibir:
             plotar_grafo_busca(

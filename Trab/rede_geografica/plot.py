@@ -45,8 +45,8 @@ def plotar_grafo(G, pos, inicio, fim) -> None:
     titulo = f"Rede Geográfica Inicial\nInício: {inicio}   |   Objetivo: {fim}"
     plt.title(titulo)
 
-    plt.show()
-    plt.close() 
+    plt.pause(5)
+    plt.close()
 
 
 def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho, inc, obj):
@@ -69,6 +69,8 @@ def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho
     for no in G.nodes():
         if no == atual:
             cores.append("yellow")
+        elif no == inc:
+            cores.append("blue")
         elif no == obj:
             cores.append("magenta")
         elif no in caminho:
@@ -90,7 +92,7 @@ def plotar_grafo_busca(G, pos, busca, passo, visitados, frontera, atual, caminho
 
 
 def finalizar_plot():
-    plt.pause(3)      # controla velocidade na ultima etapa
+    plt.pause(15)      # controla velocidade na ultima etapa
 
 def iniciar_animacao(G, pos, nd, bg, ax, fig):
 
